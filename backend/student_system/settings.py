@@ -5,6 +5,7 @@ Django settings for student_system project.
 from pathlib import Path
 import os
 import pymysql
+import dj_database_url
 
 pymysql.install_as_MySQLdb()
 
@@ -16,12 +17,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9f$v=gc5h8m__&f5+zpyu3wk4k&5j@c@hg-^fiy37=1gez3x7&'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-dev-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', '*').split(',') if host.strip()]
 
 
 # Application definition
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,7 +78,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'student_system.wsgi.application'
 
 
-if os.getenv('USE_SQLITE') == '1':
+database_url = os.getenv('DATABASE_URL')
+
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(database_url, conn_max_age=600, ssl_require=False),
+    }
+elif os.getenv('USE_SQLITE', '0') == '1':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -132,6 +140,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -154,5 +163,12 @@ REST_FRAMEWORK = {
 }
 
 # CORS 
-CORS_ALLOW_ALL_ORIGINS = True
+frontend_url = os.getenv('FRONTEND_URL', '').strip()
+
+if frontend_url:
+    CORS_ALLOWED_ORIGINS = [frontend_url]
+    CSRF_TRUSTED_ORIGINS = [frontend_url]
+else:
+    CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_CREDENTIALS = True

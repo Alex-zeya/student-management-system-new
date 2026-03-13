@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { LoginResponse, User, Course, Task, TaskSubmission, CourseResource, Announcement, Enrollment } from '../types';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },

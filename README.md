@@ -136,3 +136,33 @@ npm run dev
 - 前端默认代理 API 请求到 http://localhost:8000
 - 如需修改后端地址，编辑 `frontend/vite.config.ts`
 - 生产环境请修改 `SECRET_KEY` 和 `DEBUG` 配置
+
+## 部署
+
+推荐方案：
+
+- 前端：Vercel
+- 后端：Render
+
+### 后端部署到 Render
+
+1. 选择仓库 `Alex-zeya/student-management-system-new`
+2. Root Directory 设为 `backend`
+3. Build Command 设为 `./build.sh`
+4. Start Command 设为 `gunicorn student_system.wsgi:application`
+5. 添加环境变量：
+   - `DJANGO_DEBUG=False`
+   - `DJANGO_SECRET_KEY=你自己的随机字符串`
+   - `DJANGO_ALLOWED_HOSTS=.onrender.com`
+   - `USE_SQLITE=1`
+   - `FRONTEND_URL=https://你的前端域名.vercel.app`
+
+### 前端部署到 Vercel
+
+1. 导入同一个仓库
+2. Root Directory 设为 `frontend`
+3. Framework 选择 `Vite`
+4. 添加环境变量：
+   - `VITE_API_BASE_URL=https://你的后端域名.onrender.com/api`
+
+部署完成后，把 Vercel 的域名填回 Render 的 `FRONTEND_URL`，然后重新部署后端一次。

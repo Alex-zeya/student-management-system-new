@@ -19,41 +19,6 @@ interface ModalFormProps {
   theme?: 'green' | 'gray' | 'blue' | 'purple';
 }
 
-const themeColors = {
-  green: {
-    gradient: 'from-white to-gray-50',
-    ring: 'focus:ring-green-500',
-    bg: 'bg-white',
-    text: 'text-gray-900',
-    border: 'border-gray-200',
-    hover: 'hover:bg-gray-50',
-  },
-  gray: {
-    gradient: 'from-white to-gray-50',
-    ring: 'focus:ring-gray-500',
-    bg: 'bg-white',
-    text: 'text-gray-900',
-    border: 'border-gray-200',
-    hover: 'hover:bg-gray-50',
-  },
-  blue: {
-    gradient: 'from-white to-gray-50',
-    ring: 'focus:ring-blue-500',
-    bg: 'bg-white',
-    text: 'text-gray-900',
-    border: 'border-gray-200',
-    hover: 'hover:bg-gray-50',
-  },
-  purple: {
-    gradient: 'from-white to-gray-50',
-    ring: 'focus:ring-purple-500',
-    bg: 'bg-white',
-    text: 'text-gray-900',
-    border: 'border-gray-200',
-    hover: 'hover:bg-gray-50',
-  },
-};
-
 const sizeWidth = {
   sm: 'max-w-md',
   md: 'max-w-lg',
@@ -72,10 +37,7 @@ export const ModalForm: React.FC<ModalFormProps> = ({
   children,
   error,
   size = 'md',
-  theme = 'green',
 }) => {
-  const colors = themeColors[theme];
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Background overlay */}
