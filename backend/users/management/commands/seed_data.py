@@ -23,46 +23,56 @@ class Command(BaseCommand):
         teachers = [
             self._create_user(
                 username='teacher_zhang', password='teacher123',
-                first_name='Wei', last_name='Zhang',
-                email='zhang@school.edu', role='teacher', employee_id='T001',
+                first_name='Emma', last_name='Brown',
+                email='emma.brown@school.edu', role='teacher', employee_id='T001',
             ),
             self._create_user(
                 username='teacher_li', password='teacher123',
-                first_name='Fang', last_name='Li',
-                email='li@school.edu', role='teacher', employee_id='T002',
+                first_name='David', last_name='Wilson',
+                email='david.wilson@school.edu', role='teacher', employee_id='T002',
             ),
             self._create_user(
                 username='teacher_wang', password='teacher123',
-                first_name='Qiang', last_name='Wang',
-                email='wang@school.edu', role='teacher', employee_id='T003',
+                first_name='Lisa', last_name='Miller',
+                email='lisa.miller@school.edu', role='teacher', employee_id='T003',
+            ),
+            self._create_user(
+                username='teacher_clark', password='teacher123',
+                first_name='Sarah', last_name='Clark',
+                email='sarah.clark@school.edu', role='teacher', employee_id='T004',
+            ),
+            self._create_user(
+                username='teacher_lee', password='teacher123',
+                first_name='Daniel', last_name='Lee',
+                email='daniel.lee@school.edu', role='teacher', employee_id='T005',
             ),
         ]
 
         students = [
             self._create_user(
                 username='student_liu', password='student123',
-                first_name='Yang', last_name='Liu',
-                email='liu@student.edu', role='student', student_id='S2021001',
+                first_name='Jack', last_name='Green',
+                email='jack.green@student.edu', role='student', student_id='S2021001',
             ),
             self._create_user(
                 username='student_chen', password='student123',
-                first_name='Jing', last_name='Chen',
-                email='chen@student.edu', role='student', student_id='S2021002',
+                first_name='Amy', last_name='Davis',
+                email='amy.davis@student.edu', role='student', student_id='S2021002',
             ),
             self._create_user(
                 username='student_zhao', password='student123',
-                first_name='Lei', last_name='Zhao',
-                email='zhao@student.edu', role='student', student_id='S2021003',
+                first_name='Leo', last_name='White',
+                email='leo.white@student.edu', role='student', student_id='S2021003',
             ),
             self._create_user(
                 username='student_sun', password='student123',
-                first_name='Li', last_name='Sun',
-                email='sun@student.edu', role='student', student_id='S2021004',
+                first_name='Nina', last_name='Hall',
+                email='nina.hall@student.edu', role='student', student_id='S2021004',
             ),
             self._create_user(
                 username='student_zhou', password='student123',
-                first_name='Ming', last_name='Zhou',
-                email='zhou@student.edu', role='student', student_id='S2021005',
+                first_name='Owen', last_name='Baker',
+                email='owen.baker@student.edu', role='student', student_id='S2021005',
             ),
         ]
         self.stdout.write(self.style.SUCCESS(f'  Users created: 1 admin, {len(teachers)} teachers, {len(students)} students'))
@@ -195,6 +205,8 @@ class Command(BaseCommand):
         self.stdout.write('  teacher     teacher_zhang / teacher123')
         self.stdout.write('  teacher     teacher_li    / teacher123')
         self.stdout.write('  teacher     teacher_wang  / teacher123')
+        self.stdout.write('  teacher     teacher_clark / teacher123')
+        self.stdout.write('  teacher     teacher_lee   / teacher123')
         self.stdout.write('  student     student_liu   / student123')
         self.stdout.write('  student     student_chen  / student123')
         self.stdout.write('  student     student_zhao  / student123')
@@ -206,7 +218,18 @@ class Command(BaseCommand):
                      student_id=None, employee_id=None):
         if User.objects.filter(username=username).exists():
             user = User.objects.get(username=username)
-            self.stdout.write(f'  User already exists, skip: {username}')
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.role = role
+            user.is_staff = is_staff
+            user.is_superuser = is_superuser
+            if student_id:
+                user.student_id = student_id
+            if employee_id:
+                user.employee_id = employee_id
+            user.save()
+            self.stdout.write(f'  User already exists, updated: {username}')
             return user
         user = User.objects.create_user(
             username=username, password=password,
