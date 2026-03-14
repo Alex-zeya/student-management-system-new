@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { courseAPI, taskAPI, resourceAPI, announcementAPI } from '../../api';
 import type { Course, Task, TaskSubmission, CourseResource, Announcement } from '../../types';
 import { ModalForm, InputField, SelectField, CheckboxField } from '../../components/ModalForm';
+import { formatUserDisplayName } from '../../utils/user';
 
 type Tab = 'home' | 'courses' | 'tasks' | 'resources' | 'announcements' | 'submissions';
 
@@ -290,7 +291,7 @@ const TeacherDashboard: React.FC = () => {
         <div className="animate-fade-in-up">
           <div className="bg-gradient-to-r from-green-700 to-green-900 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-16 -mt-16" /><div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-12 -mb-12" />
-            <p className="text-white/60 text-sm mb-1">{formatDate(currentTime)}</p><h2 className="text-3xl font-bold mb-2">{getGreeting()}, {user?.last_name}{user?.first_name}</h2><p className="text-white/60">Welcome back to Teacher Console!</p>
+            <p className="text-white/60 text-sm mb-1">{formatDate(currentTime)}</p><h2 className="text-3xl font-bold mb-2">{getGreeting()}, {formatUserDisplayName(user)}</h2><p className="text-white/60">Welcome back to Teacher Console!</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <StatCard title="Teaching Courses" value={courses.length} subtitle="courses" color="text-green-600" icon={<svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" /></svg>} />
@@ -325,7 +326,7 @@ const TeacherDashboard: React.FC = () => {
       <header className="relative z-20 bg-gradient-to-r from-green-700 to-green-900 text-white shadow-xl">
         <div className="max-w-7xl mx-auto px-4"><div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-6"><div className="flex items-center gap-3"><div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center"><svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5" /></svg></div><h1 className="text-xl font-bold">Teacher Dashboard</h1></div><div className="flex items-center gap-1">{navItems.map(i => (<button key={i.key} onClick={() => handleTabChange(i.key)} className={`px-4 py-2.5 rounded-xl text-sm font-medium ${activeTab === i.key ? 'bg-white/20' : 'hover:bg-white/10'}`}>{i.label}</button>))}</div></div>
-          <div className="flex items-center gap-4"><span className="text-sm text-green-200 hidden sm:block">{user?.last_name}{user?.first_name}</span><button onClick={handleLogout} className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm">Logout</button></div>
+          <div className="flex items-center gap-4"><span className="text-sm text-green-200 hidden sm:block">{formatUserDisplayName(user)}</span><button onClick={handleLogout} className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm">Logout</button></div>
         </div></div>
       </header>
       <main className="max-w-7xl mx-auto py-8 px-4">{renderContent()}</main>

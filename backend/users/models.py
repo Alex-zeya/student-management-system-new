@@ -61,3 +61,11 @@ class User(AbstractUser):
     
     def __str__(self):
         return f"{self.username} ({self.get_role_display()})"
+
+    def get_full_name(self):
+        if self.role == 'admin':
+            return 'Admin'
+
+        parts = [self.first_name.strip(), self.last_name.strip()]
+        full_name = ' '.join(part for part in parts if part)
+        return full_name or self.username

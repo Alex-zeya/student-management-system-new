@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { authAPI, courseAPI, enrollmentAPI } from '../../api';
 import type { User, Course, Enrollment } from '../../types';
+import { formatUserDisplayName } from '../../utils/user';
 
 type Tab = 'home' | 'users' | 'courses' | 'enrollments';
 type UserFilter = 'all' | 'student' | 'teacher' | 'admin';
@@ -114,7 +115,7 @@ const AdminDashboard: React.FC = () => {
                 <label className="text-sm text-gray-600 block mb-2">Instructor *</label>
                 <select value={courseForm.teacher} onChange={e => setCourseForm(f => f ? ({ ...f, teacher: Number(e.target.value) }) : null)} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                   <option value="">-- Select --</option>
-                  {teachers.map(t => <option key={t.id} value={t.id}>{t.last_name}{t.first_name} ({t.username})</option>)}
+                  {teachers.map(t => <option key={t.id} value={t.id}>{formatUserDisplayName(t)} ({t.username})</option>)}
                 </select>
               </div>
               <div>
@@ -235,7 +236,7 @@ const AdminDashboard: React.FC = () => {
                 <label className="text-sm text-gray-600 block mb-2">Student *</label>
                 <select value={enrollForm.student} onChange={e => setEnrollForm(f => ({ ...f, student: e.target.value ? Number(e.target.value) : '' }))} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
                   <option value="">-- Select Student --</option>
-                  {students.map(s => <option key={s.id} value={s.id}>{s.last_name}{s.first_name}（{s.username}）</option>)}
+                  {students.map(s => <option key={s.id} value={s.id}>{formatUserDisplayName(s)} ({s.username})</option>)}
                 </select>
               </div>
               <div>
@@ -294,7 +295,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-lg">{u.last_name}{u.first_name}</span>
+                        <span className="font-semibold text-lg">{formatUserDisplayName(u)}</span>
                         {roleBadge(u.role)}
                       </div>
                       <div className="flex gap-4 text-sm text-gray-400">
@@ -378,7 +379,7 @@ const AdminDashboard: React.FC = () => {
           <div className="animate-fade-in-up">
             <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
               <p className="text-white/60 text-sm mb-1">{formatDate(currentTime)}</p>
-              <h2 className="text-3xl font-bold mb-2">{getGreeting()}，{user?.last_name}{user?.first_name}</h2>
+              <h2 className="text-3xl font-bold mb-2">{getGreeting()}, {formatUserDisplayName(user)}</h2>
               <p className="text-white/60">Welcome to the admin console!</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -424,7 +425,7 @@ const AdminDashboard: React.FC = () => {
                         {t.last_name?.[0] ?? t.username[0].toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium">{t.last_name}{t.first_name}</p>
+                        <p className="font-medium">{formatUserDisplayName(t)}</p>
                         <p className="text-xs text-gray-400">{t.email}</p>
                       </div>
                     </div>
@@ -462,7 +463,7 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-300 hidden sm:block">{user?.last_name}{user?.first_name}</span>
+              <span className="text-sm text-gray-300 hidden sm:block">{formatUserDisplayName(user)}</span>
               <button onClick={handleLogout} className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm">Logout</button>
             </div>
           </div>

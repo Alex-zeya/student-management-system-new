@@ -5,6 +5,7 @@ import { BellOutlined, BookOutlined, CalendarOutlined, CheckCircleOutlined, Cloc
 import { useAuth } from '../../context/AuthContext';
 import { announcementAPI, courseAPI, resourceAPI, taskAPI } from '../../api';
 import type { Announcement, Course, CourseResource, Task } from '../../types';
+import { formatUserDisplayName } from '../../utils/user';
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -268,7 +269,7 @@ const StudentDashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4 gap-4">
             <Space><div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center"><BookOutlined /></div><span className="text-xl font-bold">Student Dashboard</span></Space>
-            <Space><Avatar icon={<UserOutlined />} style={{ backgroundColor: 'rgba(255,255,255,0.25)' }} /><span className="text-sm">{user?.last_name}{user?.first_name}</span><Button type="text" icon={<LogoutOutlined />} onClick={handleLogout} className="text-white hover:bg-white/10">Logout</Button></Space>
+            <Space><Avatar icon={<UserOutlined />} style={{ backgroundColor: 'rgba(255,255,255,0.25)' }} /><span className="text-sm">{formatUserDisplayName(user)}</span><Button type="text" icon={<LogoutOutlined />} onClick={handleLogout} className="text-white hover:bg-white/10">Logout</Button></Space>
           </div>
         </div>
       </header>
